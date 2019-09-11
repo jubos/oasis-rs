@@ -55,7 +55,7 @@ fn generate_rpc_dispatcher(
     rpcs: &[ParsedRpc],
     default_fn: Option<&ParsedRpc>,
 ) -> TokenStream {
-    let service_ident = format_ident!("{}", service_name.as_str().get());
+    let service_ident = format_ident!("{}", service_name.as_str());
     let mut any_rpc_returns_result = false;
     let mut rpc_payload_variants = Vec::with_capacity(rpcs.len());
     let rpc_match_arms = rpcs
@@ -216,7 +216,7 @@ fn generate_ctor_fn(service_name: Symbol, ctor: &ParsedRpc) -> TokenStream {
         (quote!(), quote!())
     };
 
-    let service_ident = format_ident!("{}", service_name.as_str().get());
+    let service_ident = format_ident!("{}", service_name.as_str());
 
     let ctor_stmt = if ctor.output.is_result() {
         quote! {

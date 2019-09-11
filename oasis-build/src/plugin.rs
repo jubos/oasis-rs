@@ -220,7 +220,7 @@ impl rustc_driver::Callbacks for BuildPlugin {
                     adt_defs.insert((def, is_event));
                 } else {
                     let crate_name = tcx.original_crate_name(def.did.krate);
-                    match self.imports.get(crate_name.as_str().get()) {
+                    match self.imports.get(&*crate_name.as_str()) {
                         Some(version) => {
                             imports.insert((crate_name, version.to_string()));
                         }

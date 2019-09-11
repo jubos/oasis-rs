@@ -183,7 +183,7 @@ impl ParsedRpc {
         self.inputs().map(|arg| &*arg.ty)
     }
 
-    fn inputs(&self) -> impl Iterator<Item = &ast::Arg> {
+    fn inputs(&self) -> impl Iterator<Item = &ast::Param> {
         self.sig.decl.inputs.iter().skip(match self.kind {
             ParsedRpcKind::Ctor => 1, /* ctx */
             _ => 2,                   /* self, ctx */

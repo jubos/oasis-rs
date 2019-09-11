@@ -77,8 +77,8 @@ pub fn convert_interface(
         Err(errs)
     } else {
         Ok(Interface {
-            name: name.as_str().get().to_camel_case(),
-            namespace: tcx.crate_name.as_str().get().to_snake_case(),
+            name: name.as_str().to_camel_case(),
+            namespace: tcx.crate_name.as_str().to_snake_case(),
             version: std::env::var("CARGO_PKG_VERSION").unwrap(),
             imports,
             type_defs,
@@ -98,7 +98,7 @@ fn convert_state_ctor(
 
     let mut inputs = Vec::with_capacity(decl.inputs.len());
     for (arg, ty) in body
-        .arguments
+        .params
         .iter()
         .zip(decl.inputs.iter())
         .skip(1 /* skip ctx */)
@@ -142,7 +142,7 @@ fn convert_function(
 
     let mut inputs = Vec::with_capacity(decl.inputs.len());
     for (arg, ty) in body
-        .arguments
+        .params
         .iter()
         .zip(decl.inputs.iter())
         .skip(2 /* skip self and ctx */)
@@ -169,7 +169,7 @@ fn convert_function(
         Err(errs)
     } else {
         Ok(Function {
-            name: name.as_str().get().to_snake_case(),
+            name: name.as_str().to_snake_case(),
             mutability,
             inputs,
             output,
@@ -182,7 +182,7 @@ fn convert_arg(tcx: TyCtxt, pat: &hir::Pat, ty: &hir::Ty) -> Result<Field, Unsup
     convert_ty(tcx, ty).map(|ty| Field {
         name: match pat.node {
             PatKind::Wild => "_".to_string(),
-            PatKind::Binding(_, _, ident, _) => ident.name.as_str().get().to_snake_case(),
+            PatKind::Binding(_, _, ident, _) => ident.name.as_str().to_snake_case(),
             _ => unreachable!("arg pattern must be wild or ident"),
         },
         ty,
