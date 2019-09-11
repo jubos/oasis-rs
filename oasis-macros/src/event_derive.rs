@@ -34,7 +34,10 @@ pub fn event_derive(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
                     let mut topics: Vec<&[u8]> = Vec::with_capacity(#num_topics);
                     topics.push(&#event_name_topic);
                     topics.append(&mut hashes.iter().map(<_>::as_ref).collect());
-                    oasis_std::backend::emit(&topics, &serde_cbor::to_vec(self).unwrap());
+                    let mut serializer = serde_cbor::Serializer::new(Vec::new());
+                    use serde::Serializer;
+                    let mut map_ser = serializer.serialize_map(None);
+                    oasis_std::backend::emit(&topics, &serializer.into_inner());
                 }
             }
         };
